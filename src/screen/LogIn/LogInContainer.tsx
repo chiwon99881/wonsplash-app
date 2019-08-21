@@ -5,9 +5,11 @@ import {
   NavigationParams
 } from "react-navigation";
 import LogInPresenter from "./LogInPresenter";
+import { Alert } from "react-native";
 
 interface IProps {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+  usernameLogin: (username: string, password: string) => void;
 }
 interface IState {
   username: string;
@@ -30,6 +32,22 @@ class LogInContainer extends React.Component<IProps, IState> {
   public changePassword = (text: string) => {
     this.setState({ password: text });
   };
+  public onSubmitLogin = () => {
+    const { username, password } = this.state;
+    const { usernameLogin } = this.props;
+    if (username === "" || password === "") {
+      Alert.alert("All Fields are required 🙂");
+      return;
+    } else {
+      try {
+        this.setState({ loading: true });
+        usernameLogin(username, password);
+      } catch (e) {
+        Alert.alert(e.message);
+        console.log(e);
+      }
+    }
+  };
 
   public render() {
     const { navigation } = this.props;
@@ -42,6 +60,7 @@ class LogInContainer extends React.Component<IProps, IState> {
         loading={loading}
         changeUsername={this.changeUsername}
         changePassword={this.changePassword}
+        onSubmitLogin={this.onSubmitLogin}
       />
     );
   }

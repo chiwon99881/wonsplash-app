@@ -9,12 +9,14 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
-  Text
+  Text,
+  KeyboardAvoidingView
 } from "react-native";
 import Button from "../../components/Button";
 import Theme from "../../../styles/Theme";
 import constants from "../../../styles/constants";
 import TextInput from "../../components/TextInput";
+import { Ionicons } from "@expo/vector-icons";
 
 const Container = styled.View`
   flex: 1;
@@ -47,6 +49,7 @@ interface IProps {
   loading: boolean;
   changeUsername: (text: string) => void;
   changePassword: (text: string) => void;
+  onSubmitLogin: () => void;
 }
 const LogInPresenter: React.SFC<IProps> = ({
   navigation,
@@ -54,91 +57,104 @@ const LogInPresenter: React.SFC<IProps> = ({
   password,
   loading,
   changeUsername,
-  changePassword
+  changePassword,
+  onSubmitLogin
 }) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Container>
-        <Logo>
-          <Text
+      <KeyboardAvoidingView enabled behavior={"padding"} style={{ flex: 1 }}>
+        <Container>
+          <Logo>
+            <Text
+              style={{
+                fontSize: 40,
+                color: Theme.blackFontColor,
+                fontWeight: "600"
+              }}
+            >
+              Wonsplash
+            </Text>
+          </Logo>
+          <Column>
+            <TouchableOpacity>
+              <Horizontal
+                style={{
+                  width: constants.width - 30,
+                  backgroundColor: Theme.blueColor,
+                  borderRadius: 6,
+                  padding: 5,
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                <Ionicons
+                  name={"logo-facebook"}
+                  color={Theme.whiteFontColor}
+                  size={25}
+                />
+                <Text style={{ marginLeft: 10, color: Theme.whiteFontColor }}>
+                  Login with Facebook
+                </Text>
+              </Horizontal>
+            </TouchableOpacity>
+          </Column>
+          <Column style={{ alignItems: "center" }}>
+            <Text style={{ color: Theme.greyFontColor }}>OR</Text>
+          </Column>
+          <Column>
+            <TextInput
+              width={constants.width - 30}
+              value={username}
+              placeholder={"Username"}
+              onChangeText={changeUsername}
+              returnKeyType={"done"}
+            />
+          </Column>
+          <Column>
+            <TextInput
+              width={constants.width - 30}
+              value={password}
+              placeholder={"Password"}
+              onChangeText={changePassword}
+              returnKeyType={"done"}
+              secureTextEntry={true}
+            />
+          </Column>
+          <Column>
+            <TouchableOpacity onPress={onSubmitLogin}>
+              <Button
+                bgColor={Theme.blackFontColor}
+                loading={loading}
+                text={"Log In"}
+                textBold={false}
+                textColor={Theme.whiteFontColor}
+                textSize={"15px"}
+                width={constants.width - 30}
+                padding={10}
+              />
+            </TouchableOpacity>
+          </Column>
+          <Column
             style={{
-              fontSize: 40,
-              color: Theme.blackFontColor,
-              fontWeight: "600"
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "row"
             }}
           >
-            Wonsplash
-          </Text>
-        </Logo>
-        <Column>
-          <TouchableOpacity>
-            <Button
-              bgColor={Theme.blueColor}
-              loading={loading}
-              text={"Login with Facebook"}
-              textBold={false}
-              textColor={Theme.whiteFontColor}
-              textSize={"15px"}
-              width={constants.width - 30}
-              padding={10}
-            />
-          </TouchableOpacity>
-        </Column>
-        <Column style={{ alignItems: "center" }}>
-          <Text style={{ color: Theme.greyFontColor }}>OR</Text>
-        </Column>
-        <Column>
-          <TextInput
-            width={constants.width - 30}
-            value={username}
-            placeholder={"Username"}
-            onChangeText={changeUsername}
-            returnKeyType={"done"}
-          />
-        </Column>
-        <Column>
-          <TextInput
-            width={constants.width - 30}
-            value={password}
-            placeholder={"Password"}
-            onChangeText={changePassword}
-            returnKeyType={"done"}
-          />
-        </Column>
-        <Column>
-          <TouchableOpacity>
-            <Button
-              bgColor={Theme.blackFontColor}
-              loading={loading}
-              text={"Log In"}
-              textBold={false}
-              textColor={Theme.whiteFontColor}
-              textSize={"15px"}
-              width={constants.width - 30}
-              padding={10}
-            />
-          </TouchableOpacity>
-        </Column>
-        <Column
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "row"
-          }}
-        >
-          <Horizontal style={{ marginRight: 5 }}>
-            <Text style={{ fontSize: 15 }}>Don't have account ? </Text>
-          </Horizontal>
-          <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-            <Horizontal>
-              <Text style={{ fontSize: 15, color: Theme.blueFollowColor }}>
-                Join
-              </Text>
+            <Horizontal style={{ marginRight: 5 }}>
+              <Text style={{ fontSize: 15 }}>Don't have account ? </Text>
             </Horizontal>
-          </TouchableOpacity>
-        </Column>
-      </Container>
+            <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+              <Horizontal>
+                <Text style={{ fontSize: 15, color: Theme.blueFollowColor }}>
+                  Join
+                </Text>
+              </Horizontal>
+            </TouchableOpacity>
+          </Column>
+        </Container>
+      </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
 };

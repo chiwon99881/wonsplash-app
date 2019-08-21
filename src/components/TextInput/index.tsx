@@ -18,7 +18,8 @@ interface IProps {
   onChangeText: any;
   onSubmitEditing?: any;
   returnKeyType?: "done" | "go" | "next" | "search" | "send";
-  className?: any;
+  value: any;
+  secureTextEntry?: boolean;
 }
 const ExTextInput: React.SFC<IProps> = ({
   width,
@@ -27,17 +28,19 @@ const ExTextInput: React.SFC<IProps> = ({
   placeholderTextColor,
   returnKeyType,
   onSubmitEditing,
-  className
+  value,
+  secureTextEntry = false
 }) => {
   return (
     <Container
-      className={className}
+      value={value}
       returnKeyType={returnKeyType}
       width={width}
       placeholder={placeholder}
       placeholderTextColor={placeholderTextColor}
       onChangeText={onChangeText}
       onSubmitEditing={onSubmitEditing}
+      secureTextEntry={secureTextEntry}
     />
   );
 };

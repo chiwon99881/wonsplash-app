@@ -40,7 +40,7 @@ const Button: React.SFC<IProps> = ({
   return (
     <Container bgColor={bgColor} width={width} padding={padding}>
       {loading ? (
-        <ActivityIndicator size={"small"} color={"black"} />
+        <ActivityIndicator size={"small"} color={"white"} />
       ) : (
         <ExText textColor={textColor} textSize={textSize} textBold={textBold}>
           {text}

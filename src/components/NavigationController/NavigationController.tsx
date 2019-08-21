@@ -7,8 +7,8 @@ interface IProps {
 }
 const NavigationController: React.SFC<IProps> = ({ isLoggedIn }) => {
   return isLoggedIn ? (
-    <View>
-      <Text>LoggedIn</Text>
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Text>Logged In</Text>
     </View>
   ) : (
     <AuthNavigation />

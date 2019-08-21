@@ -4,7 +4,7 @@ import {
   persistCombineReducers,
   PersistConfig
 } from "redux-persist";
-import AsyncStorage from "redux-persist/lib/storage";
+import storage from "redux-persist/lib/storage";
 import thunk from "redux-thunk";
 import user from "./modules/user";
 
@@ -12,7 +12,7 @@ const middlewares = [thunk];
 
 const persistConfig: PersistConfig = {
   key: "root",
-  storage: AsyncStorage
+  storage
 };
 
 const reducer = persistCombineReducers(persistConfig, {
