@@ -49,8 +49,6 @@ class LogInContainer extends React.Component<IProps, IState> {
         }
       } catch (e) {
         console.log(e);
-      } finally {
-        this.setState({ loading: false });
       }
     }
   };
@@ -65,8 +63,6 @@ class LogInContainer extends React.Component<IProps, IState> {
       }
     } catch (e) {
       console.log(e.message);
-    } finally {
-      this.setState({ loading: false });
     }
   };
 
