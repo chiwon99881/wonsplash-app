@@ -1,8 +1,9 @@
 // import
 import axios from "axios";
 import { Dispatch } from "redux";
-import { API_URL } from "../../ngrok";
+import { API_URL, FB_APPID } from "../../utils";
 import { Alert, AsyncStorage } from "react-native";
+import * as Facebook from "expo-facebook";
 //types
 export interface ITokenData {
   token: string;
@@ -33,8 +34,8 @@ function savelogOut() {
 }
 // action API
 function usernameLogin(username: string, password: string) {
-  return (dispatch: Dispatch) => {
-    axios
+  return async (dispatch: Dispatch) => {
+    return axios
       .post(`${API_URL}/rest-auth/login/`, {
         username,
         password
@@ -42,11 +43,47 @@ function usernameLogin(username: string, password: string) {
       .then(res => {
         if (res.status === 200) {
           dispatch(saveToken(res.data));
+          return true;
         } else {
           Alert.alert(`Error 😥 ${res.status} | ${res.statusText}`);
+          return false;
         }
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err);
+        return false;
+      });
+  };
+}
+function facebookLogin() {
+  return async (dispatch: Dispatch) => {
+    const { token, type } = await Facebook.logInWithReadPermissionsAsync(
+      FB_APPID,
+      {
+        permissions: ["public_profile", "email"]
+      }
+    );
+    if (type === "success") {
+      return axios
+        .post(`${API_URL}/users/login/facebook/`, {
+          access_token: token
+        })
+        .then(res => {
+          if (res.status === 200) {
+            dispatch(saveToken(res.data));
+            return true;
+          } else {
+            Alert.alert(`Error 😥 ${res.status} | ${res.statusText}`);
+            return false;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          return false;
+        });
+    } else {
+      return false;
+    }
   };
 }
 function logout() {
@@ -110,7 +147,8 @@ async function applyLogOut(state, action) {
 // export
 export const actionCreators = {
   usernameLogin,
-  logout
+  logout,
+  facebookLogin
 };
 
 export default reducer;

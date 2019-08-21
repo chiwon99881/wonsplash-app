@@ -10,7 +10,8 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Text,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  ActivityIndicator
 } from "react-native";
 import Button from "../../components/Button";
 import Theme from "../../../styles/Theme";
@@ -50,6 +51,7 @@ interface IProps {
   changeUsername: (text: string) => void;
   changePassword: (text: string) => void;
   onSubmitLogin: () => void;
+  facebookLogin: () => void;
 }
 const LogInPresenter: React.SFC<IProps> = ({
   navigation,
@@ -58,7 +60,8 @@ const LogInPresenter: React.SFC<IProps> = ({
   loading,
   changeUsername,
   changePassword,
-  onSubmitLogin
+  onSubmitLogin,
+  facebookLogin
 }) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -76,7 +79,7 @@ const LogInPresenter: React.SFC<IProps> = ({
             </Text>
           </Logo>
           <Column>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={facebookLogin}>
               <Horizontal
                 style={{
                   width: constants.width - 30,
@@ -87,14 +90,22 @@ const LogInPresenter: React.SFC<IProps> = ({
                   alignItems: "center"
                 }}
               >
-                <Ionicons
-                  name={"logo-facebook"}
-                  color={Theme.whiteFontColor}
-                  size={25}
-                />
-                <Text style={{ marginLeft: 10, color: Theme.whiteFontColor }}>
-                  Login with Facebook
-                </Text>
+                {loading ? (
+                  <ActivityIndicator size={"small"} color={"white"} />
+                ) : (
+                  <>
+                    <Ionicons
+                      name={"logo-facebook"}
+                      color={Theme.whiteFontColor}
+                      size={25}
+                    />
+                    <Text
+                      style={{ marginLeft: 10, color: Theme.whiteFontColor }}
+                    >
+                      Login with Facebook
+                    </Text>
+                  </>
+                )}
               </Horizontal>
             </TouchableOpacity>
           </Column>

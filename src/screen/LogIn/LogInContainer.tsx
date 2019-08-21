@@ -9,7 +9,8 @@ import { Alert } from "react-native";
 
 interface IProps {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
-  usernameLogin: (username: string, password: string) => void;
+  usernameLogin: (username: string, password: string) => Promise<boolean>;
+  facebookLogin: () => Promise<boolean>;
 }
 interface IState {
   username: string;
@@ -32,7 +33,7 @@ class LogInContainer extends React.Component<IProps, IState> {
   public changePassword = (text: string) => {
     this.setState({ password: text });
   };
-  public onSubmitLogin = () => {
+  public onSubmitLogin = async () => {
     const { username, password } = this.state;
     const { usernameLogin } = this.props;
     if (username === "" || password === "") {
@@ -41,11 +42,28 @@ class LogInContainer extends React.Component<IProps, IState> {
     } else {
       try {
         this.setState({ loading: true });
-        usernameLogin(username, password);
+        const res = await usernameLogin(username, password);
+        if (!res) {
+          this.setState({ loading: false });
+          Alert.alert("Something Wrong 😥");
+        }
       } catch (e) {
         Alert.alert(e.message);
         console.log(e);
       }
+    }
+  };
+  public onFacebookLogin = async () => {
+    const { facebookLogin } = this.props;
+    try {
+      this.setState({ loading: true });
+      const res = await facebookLogin();
+      if (!res) {
+        this.setState({ loading: false });
+        Alert.alert("Something Wrong 😥");
+      }
+    } catch (e) {
+      console.log(e.message);
     }
   };
 
@@ -61,6 +79,7 @@ class LogInContainer extends React.Component<IProps, IState> {
         changeUsername={this.changeUsername}
         changePassword={this.changePassword}
         onSubmitLogin={this.onSubmitLogin}
+        facebookLogin={this.onFacebookLogin}
       />
     );
   }

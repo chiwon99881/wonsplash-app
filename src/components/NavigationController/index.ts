@@ -1,5 +1,6 @@
 import NavigationController from "./NavigationController";
 import { connect } from "react-redux";
+import { actionCreators } from "../../../redux/modules/user";
 
 const mapStateToProps = (state, ownProps) => {
   const {
@@ -9,5 +10,15 @@ const mapStateToProps = (state, ownProps) => {
     isLoggedIn
   };
 };
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    logout: () => {
+      dispatch(actionCreators.logout());
+    }
+  };
+};
 
-export default connect(mapStateToProps)(NavigationController);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NavigationController);

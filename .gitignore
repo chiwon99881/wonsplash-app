@@ -12,3 +12,4 @@ web-report/
 yarn.lock
 yarn-error.log
 ngrok.ts
+utils.ts
