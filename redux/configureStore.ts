@@ -7,6 +7,7 @@ import {
 import storage from "redux-persist/lib/storage";
 import thunk from "redux-thunk";
 import user from "./modules/user";
+import collect from "./modules/collect";
 
 const middlewares = [thunk];
 
@@ -16,7 +17,8 @@ const persistConfig: PersistConfig = {
 };
 
 const reducer = persistCombineReducers(persistConfig, {
-  user
+  user,
+  collect
 });
 
 const configureStore = () => {
