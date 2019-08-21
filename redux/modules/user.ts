@@ -107,6 +107,34 @@ function logout() {
       .catch(err => console.log(err));
   };
 }
+function registration(
+  username: string,
+  password1: string,
+  password2: string,
+  email: string
+) {
+  return async (dispatch: Dispatch) => {
+    return axios
+      .post(`${API_URL}/rest-auth/registration/`, {
+        username,
+        password1,
+        password2,
+        email
+      })
+      .then(res => {
+        if (res.status === 201) {
+          return true;
+        } else {
+          Alert.alert(`Error 😥 ${res.status} | ${res.statusText}`);
+          return false;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        return false;
+      });
+  };
+}
 
 // initialState
 const initialState = {
@@ -148,7 +176,8 @@ async function applyLogOut(state, action) {
 export const actionCreators = {
   usernameLogin,
   logout,
-  facebookLogin
+  facebookLogin,
+  registration
 };
 
 export default reducer;

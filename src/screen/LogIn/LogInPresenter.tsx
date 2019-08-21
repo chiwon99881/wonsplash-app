@@ -10,8 +10,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Text,
-  KeyboardAvoidingView,
-  ActivityIndicator
+  KeyboardAvoidingView
 } from "react-native";
 import Button from "../../components/Button";
 import Theme from "../../../styles/Theme";
@@ -90,22 +89,14 @@ const LogInPresenter: React.SFC<IProps> = ({
                   alignItems: "center"
                 }}
               >
-                {loading ? (
-                  <ActivityIndicator size={"small"} color={"white"} />
-                ) : (
-                  <>
-                    <Ionicons
-                      name={"logo-facebook"}
-                      color={Theme.whiteFontColor}
-                      size={25}
-                    />
-                    <Text
-                      style={{ marginLeft: 10, color: Theme.whiteFontColor }}
-                    >
-                      Login with Facebook
-                    </Text>
-                  </>
-                )}
+                <Ionicons
+                  name={"logo-facebook"}
+                  color={Theme.whiteFontColor}
+                  size={25}
+                />
+                <Text style={{ marginLeft: 10, color: Theme.whiteFontColor }}>
+                  Login with Facebook
+                </Text>
               </Horizontal>
             </TouchableOpacity>
           </Column>
