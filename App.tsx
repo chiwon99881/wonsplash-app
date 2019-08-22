@@ -1,6 +1,6 @@
 import React from "react";
 import { AppLoading } from "expo";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, SimpleLineIcons } from "@expo/vector-icons";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import { Provider } from "react-redux";
@@ -25,7 +25,8 @@ class App extends React.Component<{}, IState> {
   public preLoad = async () => {
     try {
       await Font.loadAsync({
-        ...Ionicons.font
+        ...Ionicons.font,
+        ...SimpleLineIcons.font
       });
       await Asset.loadAsync([
         require("./assets/logo.png"),

@@ -4,16 +4,20 @@ import constants from "../../../styles/constants";
 import {
   NavigationScreenProp,
   NavigationState,
-  NavigationParams
+  NavigationParams,
+  ScrollView
 } from "react-navigation";
-import { ImageBackground, TouchableOpacity } from "react-native";
+import { ImageBackground, TouchableOpacity, Alert } from "react-native";
 import { IProfile } from "../../../redux/modules/user";
 import { ICollect } from "../../../redux/modules/collect";
 import Avatar from "../../components/Avatar";
 import Theme from "../../../styles/Theme";
+import { SimpleLineIcons } from "@expo/vector-icons";
+import Collect from "../../components/Collect";
 
 const Container = styled.View`
   flex: 1;
+  min-height: ${constants.height / 2};
 `;
 const Horizontal = styled.View`
   display: flex;
@@ -28,6 +32,7 @@ const FakeTextInput = styled.View`
   border-radius: 10px;
   padding: 10px;
   display: flex;
+  opacity: 0.9;
 `;
 
 interface IProps {
@@ -49,7 +54,17 @@ const FeedPresenter: React.SFC<IProps> = ({ navigation, my, collects }) => {
           display: "flex"
         }}
       >
-        <Horizontal style={{ padding: 12, alignItems: "flex-end" }}>
+        <Horizontal
+          style={{
+            padding: 12,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center"
+          }}
+        >
+          <TouchableOpacity onPress={() => Alert.alert("Wanna Logout ❓")}>
+            <SimpleLineIcons name={"logout"} size={27} color={"white"} />
+          </TouchableOpacity>
           <TouchableOpacity>
             <Avatar uri={my.avatar} wid={"40px"} hei={"40px"} rad={"20px"} />
           </TouchableOpacity>
@@ -85,6 +100,32 @@ const FeedPresenter: React.SFC<IProps> = ({ navigation, my, collects }) => {
           </Text>
         </Horizontal>
       </ImageBackground>
+      <ScrollView>
+        <Horizontal style={{ padding: 15 }}>
+          <Text
+            style={{
+              color: Theme.blackFontColor,
+              fontWeight: "500",
+              fontSize: 18
+            }}
+          >
+            New
+          </Text>
+        </Horizontal>
+        {collects.map(c => (
+          <Collect
+            key={c.id}
+            id={c.id}
+            file={c.file}
+            creator={c.creator}
+            createdAt={c.natural_time}
+            tags={c.tags}
+            views={c.views}
+            isLiked={c.is_liked}
+            likeCount={c.like_count}
+          />
+        ))}
+      </ScrollView>
     </Container>
   );
 };
