@@ -4,6 +4,7 @@ import { Dispatch } from "redux";
 import { API_URL, FB_APPID } from "../../utils";
 import { Alert, AsyncStorage } from "react-native";
 import * as Facebook from "expo-facebook";
+import { ICollect } from "./collect";
 //types
 export interface ITokenData {
   token: string;
@@ -15,10 +16,25 @@ export interface ITokenData {
     username: string;
   };
 }
+export interface IProfile {
+  id: number;
+  username: string;
+  avatar: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  followers_count: number;
+  following_count: number;
+  is_following: boolean;
+  is_self: boolean;
+  post_count: number;
+  images: ICollect[];
+}
 
 // action types
 const SAVE_TOKEN = "SAVE_TOKEN";
 const LOG_OUT = "LOG_OUT";
+const PROFILE = "PROFILE";
 
 // action (creator)
 function saveToken(data: ITokenData) {
@@ -30,6 +46,12 @@ function saveToken(data: ITokenData) {
 function savelogOut() {
   return {
     type: LOG_OUT
+  };
+}
+function saveProfile(data: IProfile) {
+  return {
+    type: PROFILE,
+    data
   };
 }
 // action API
@@ -135,6 +157,27 @@ function registration(
       });
   };
 }
+function getProfile(username: string) {
+  return (dispatch: Dispatch, getState: any) => {
+    const {
+      user: { token }
+    } = getState();
+    axios
+      .get(`${API_URL}/users/${username}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(res => {
+        if (res.status === 200) {
+          dispatch(saveProfile(res.data));
+        } else {
+          console.log("Error => ", res.status, res.statusText, res.data);
+        }
+      })
+      .catch(err => console.log(err));
+  };
+}
 
 // initialState
 const initialState = {
@@ -147,6 +190,8 @@ function reducer(state = initialState, action: any) {
       return applySaveToken(state, action);
     case LOG_OUT:
       return applyLogOut(state, action);
+    case PROFILE:
+      return applySaveProfile(state, action);
     default:
       return state;
   }
@@ -171,13 +216,21 @@ async function applyLogOut(state, action) {
     username: ""
   };
 }
+function applySaveProfile(state, action) {
+  const { data } = action;
+  return {
+    ...state,
+    profile: data
+  };
+}
 
 // export
 export const actionCreators = {
   usernameLogin,
   logout,
   facebookLogin,
-  registration
+  registration,
+  getProfile
 };
 
 export default reducer;
