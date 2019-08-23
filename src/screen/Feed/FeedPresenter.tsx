@@ -39,8 +39,14 @@ interface IProps {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
   my: IProfile;
   collects: ICollect[];
+  logout: () => void;
 }
-const FeedPresenter: React.SFC<IProps> = ({ navigation, my, collects }) => {
+const FeedPresenter: React.SFC<IProps> = ({
+  navigation,
+  my,
+  collects,
+  logout
+}) => {
   return (
     <Container>
       <ImageBackground
@@ -62,7 +68,14 @@ const FeedPresenter: React.SFC<IProps> = ({ navigation, my, collects }) => {
             alignItems: "center"
           }}
         >
-          <TouchableOpacity onPress={() => Alert.alert("Wanna Logout ❓")}>
+          <TouchableOpacity
+            onPress={() =>
+              Alert.alert("Wanna Logout ❓", "", [
+                { text: "OK", onPress: () => logout() },
+                { text: "CANCEL", onPress: () => null }
+              ])
+            }
+          >
             <SimpleLineIcons name={"logout"} size={27} color={"white"} />
           </TouchableOpacity>
           <TouchableOpacity>

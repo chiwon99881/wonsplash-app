@@ -22,6 +22,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     getProfile: (username: string) => {
       dispatch(userActions.getProfile(username));
+    },
+    logout: () => {
+      dispatch(userActions.logout());
     }
   };
 };

@@ -42,11 +42,7 @@ interface IState {
 }
 class Search extends React.Component<IProps, IState> {
   static navigationOptions = ({ navigation }) => ({
-    headerStyle: {
-      height: 60,
-      backgroundColor: "#FBFBFB"
-    },
-    headerTitle: () => (
+    headerTitle: (
       <TextInput
         style={{
           width: constants.width / 1.3,
@@ -79,16 +75,20 @@ class Search extends React.Component<IProps, IState> {
 
   public constructor(props) {
     super(props);
-    const { navigation } = this.props;
+    const { navigation } = props;
     this.state = {
       searchTerm: ""
     };
-    navigation.setParams({ searchTerm: this.state.searchTerm });
-    navigation.setParams({ onChangeText: this.onSearchTermChange });
-    navigation.setParams({ onSubmitEditing: this.onSubmitEditing });
+    navigation.setParams({
+      searchTerm: this.state.searchTerm,
+      onChangeText: this.onSearchTermChange,
+      onSubmitEditing: this.onSubmitEditing
+    });
   }
   public onSearchTermChange = text => {
+    const { navigation } = this.props;
     this.setState({ searchTerm: text });
+    navigation.setParams({ searchTerm: text });
   };
   public onSubmitEditing = () => {
     const { searchTerm } = this.state;
@@ -97,22 +97,35 @@ class Search extends React.Component<IProps, IState> {
   };
 
   public render() {
+    const { navigation } = this.props;
     return (
       <Container>
         <Horizontal>
           <Label>Trending</Label>
         </Horizontal>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("SearchResult", { searchTerm: "model" })
+          }
+        >
           <TextHorizontal style={{ marginTop: 10 }}>
             <ExampleText>model</ExampleText>
           </TextHorizontal>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("SearchResult", { searchTerm: "animal" })
+          }
+        >
           <TextHorizontal>
             <ExampleText>animal</ExampleText>
           </TextHorizontal>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("SearchResult", { searchTerm: "튜브" })
+          }
+        >
           <TextHorizontal>
             <ExampleText>튜브</ExampleText>
           </TextHorizontal>

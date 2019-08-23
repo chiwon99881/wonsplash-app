@@ -12,8 +12,9 @@ import { IProfile } from "../../../redux/modules/user";
 interface IProps {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
   feed: () => void;
-  profile: IProfile;
+  logout: () => void;
   getProfile: (username: string) => void;
+  profile: IProfile;
   collects: ICollect[];
   username: string;
 }
@@ -38,6 +39,16 @@ class FeedContainer extends React.Component<IProps, IState> {
       this.setState({ loading: false });
     }
   };
+  public onPresslogout = () => {
+    const { logout } = this.props;
+    try {
+      this.setState({ loading: true });
+      logout();
+    } catch (e) {
+      this.setState({ loading: false });
+      console.log(e);
+    }
+  };
 
   public render() {
     const { navigation } = this.props;
@@ -50,6 +61,7 @@ class FeedContainer extends React.Component<IProps, IState> {
         <FeedPresenter
           navigation={navigation}
           my={profile}
+          logout={this.onPresslogout}
           collects={collects}
         />
       );

@@ -21,11 +21,18 @@ export interface ICollect {
 
 // action type
 const FEED = "FEED";
+const SEARCH = "SEARCH";
 
 // action creator
 function saveFeed(data: ICollect[]) {
   return {
     type: FEED,
+    data
+  };
+}
+function saveSearch(data: ICollect[]) {
+  return {
+    type: SEARCH,
     data
   };
 }
@@ -52,6 +59,27 @@ function feed() {
       .catch(err => console.log(err));
   };
 }
+function search(searchTerm: string) {
+  return (dispatch: Dispatch, getState: any) => {
+    const {
+      user: { token }
+    } = getState();
+    axios
+      .get(`${API_URL}/collects/search/?term=${searchTerm}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(res => {
+        if (res.status === 200) {
+          dispatch(saveSearch(res.data));
+        } else {
+          console.log("Error => ", res.status, res.statusText, res.data);
+        }
+      })
+      .catch(err => console.log(err));
+  };
+}
 
 // initialState
 const initialState = {
@@ -62,24 +90,34 @@ const initialState = {
 function reducer(state = initialState, action: any) {
   switch (action.type) {
     case FEED:
-      return applyFeed(state, action);
+      return applySaveFeed(state, action);
+    case SEARCH:
+      return applySaveSearch(state, action);
     default:
       return state;
   }
 }
 
 // reducer function
-function applyFeed(state, action) {
+function applySaveFeed(state, action) {
   const { data } = action;
   return {
     ...state,
     collects: data
   };
 }
+function applySaveSearch(state, action) {
+  const { data } = action;
+  return {
+    ...state,
+    searchCollects: data
+  };
+}
 
 // export
 export const actionCreators = {
-  feed
+  feed,
+  search
 };
 
 export default reducer;
