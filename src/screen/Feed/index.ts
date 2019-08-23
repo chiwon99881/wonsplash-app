@@ -6,12 +6,12 @@ import { actionCreators as userActions } from "../../../redux/modules/user";
 const mapStateToProps = (state, ownProps) => {
   const {
     collect: { collects },
-    user: { username, profile }
+    user: { username, myProfile }
   } = state;
   return {
     collects,
     username,
-    profile
+    myProfile
   };
 };
 
@@ -20,8 +20,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     feed: () => {
       dispatch(collectActions.feed());
     },
-    getProfile: (username: string) => {
-      dispatch(userActions.getProfile(username));
+    getMyProfile: () => {
+      dispatch(userActions.getMyProfile());
     },
     logout: () => {
       dispatch(userActions.logout());

@@ -13,8 +13,8 @@ interface IProps {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
   feed: () => void;
   logout: () => void;
-  getProfile: (username: string) => void;
-  profile: IProfile;
+  getMyProfile: () => void;
+  myProfile: IProfile;
   collects: ICollect[];
   username: string;
 }
@@ -29,16 +29,17 @@ class FeedContainer extends React.Component<IProps, IState> {
     };
   }
   public componentDidMount() {
-    const { feed, getProfile, username } = this.props;
+    const { feed, getMyProfile } = this.props;
     feed();
-    getProfile(username);
+    getMyProfile();
   }
 
   public UNSAFE_componentWillReceiveProps = (nextProps, prevState) => {
-    if (nextProps && nextProps.collects && nextProps.profile) {
+    if (nextProps && nextProps.collects && nextProps.myProfile) {
       this.setState({ loading: false });
     }
   };
+
   public onPresslogout = () => {
     const { logout } = this.props;
     try {
@@ -56,11 +57,11 @@ class FeedContainer extends React.Component<IProps, IState> {
     if (loading) {
       return <Loader />;
     } else {
-      const { profile, collects } = this.props;
+      const { myProfile, collects } = this.props;
       return (
         <FeedPresenter
           navigation={navigation}
-          my={profile}
+          my={myProfile}
           logout={this.onPresslogout}
           collects={collects}
         />

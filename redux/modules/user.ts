@@ -35,6 +35,7 @@ export interface IProfile {
 const SAVE_TOKEN = "SAVE_TOKEN";
 const LOG_OUT = "LOG_OUT";
 const PROFILE = "PROFILE";
+const MY_PROFILE = "MY_PROFILE";
 
 // action (creator)
 function saveToken(data: ITokenData) {
@@ -48,12 +49,19 @@ function savelogOut() {
     type: LOG_OUT
   };
 }
+function saveMyProfile(data: IProfile) {
+  return {
+    type: MY_PROFILE,
+    data
+  };
+}
 function saveProfile(data: IProfile) {
   return {
     type: PROFILE,
     data
   };
 }
+
 // action API
 function usernameLogin(username: string, password: string) {
   return async (dispatch: Dispatch) => {
@@ -157,6 +165,27 @@ function registration(
       });
   };
 }
+function getMyProfile() {
+  return (dispatch: Dispatch, getState: any) => {
+    const {
+      user: { token, username }
+    } = getState();
+    axios
+      .get(`${API_URL}/users/${username}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(res => {
+        if (res.status === 200) {
+          dispatch(saveMyProfile(res.data));
+        } else {
+          console.log("Error => ", res.status, res.statusText, res.data);
+        }
+      })
+      .catch(err => console.log(err));
+  };
+}
 function getProfile(username: string) {
   return (dispatch: Dispatch, getState: any) => {
     const {
@@ -190,6 +219,8 @@ function reducer(state = initialState, action: any) {
       return applySaveToken(state, action);
     case LOG_OUT:
       return applyLogOut(state, action);
+    case MY_PROFILE:
+      return applySaveMyProfile(state, action);
     case PROFILE:
       return applySaveProfile(state, action);
     default:
@@ -216,6 +247,13 @@ async function applyLogOut(state, action) {
     username: ""
   };
 }
+function applySaveMyProfile(state, action) {
+  const { data } = action;
+  return {
+    ...state,
+    myProfile: data
+  };
+}
 function applySaveProfile(state, action) {
   const { data } = action;
   return {
@@ -230,6 +268,7 @@ export const actionCreators = {
   logout,
   facebookLogin,
   registration,
+  getMyProfile,
   getProfile
 };
 
