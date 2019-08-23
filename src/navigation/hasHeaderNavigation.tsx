@@ -1,5 +1,5 @@
 import { createStackNavigator } from "react-navigation";
-import Search from "../screen/Search";
+import Search from "../screen/Search/Search";
 
 export default createStackNavigator(
   {

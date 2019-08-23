@@ -81,7 +81,7 @@ const FeedPresenter: React.SFC<IProps> = ({ navigation, my, collects }) => {
           <Text style={{ fontSize: 30, fontWeight: "700", marginBottom: 5 }}>
             Photos for everyone
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Search")}>
             <FakeTextInput>
               <Text>🔍 Search photos</Text>
             </FakeTextInput>
