@@ -78,7 +78,11 @@ const FeedPresenter: React.SFC<IProps> = ({
           >
             <SimpleLineIcons name={"logout"} size={27} color={"white"} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("Profile", { username: my.username })
+            }
+          >
             <Avatar uri={my.avatar} wid={"40px"} hei={"40px"} rad={"20px"} />
           </TouchableOpacity>
         </Horizontal>

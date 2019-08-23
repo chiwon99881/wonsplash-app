@@ -1,6 +1,6 @@
 import React from "react";
 // import styled from "styled-components/native";
-import { ImageBackground, Alert } from "react-native";
+import { ImageBackground } from "react-native";
 import { NavigationScreenProp, NavigationParams } from "react-navigation";
 import { NavigationState } from "react-navigation";
 import constants from "../../../styles/constants";
@@ -61,7 +61,11 @@ const CollectPresenter: React.SFC<IProps> = ({
         }}
       >
         <Footer>
-          <TouchableOpacity onPress={() => Alert.alert("name")}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("Profile", { username: creator.username })
+            }
+          >
             <Creator>{creator.username}</Creator>
           </TouchableOpacity>
         </Footer>

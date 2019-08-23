@@ -81,7 +81,13 @@ const DetailPhotoPresenter: React.SFC<IProps> = ({
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name={"ios-close"} size={40} color={"white"} />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("Profile", {
+              username: detailCollect.creator.username
+            })
+          }
+        >
           <Text style={{ fontWeight: "600", fontSize: 17 }}>
             {detailCollect.creator.username}
           </Text>
