@@ -22,6 +22,7 @@ export interface ICollect {
 // action type
 const FEED = "FEED";
 const SEARCH = "SEARCH";
+const DETAIL = "DETAIL";
 
 // action creator
 function saveFeed(data: ICollect[]) {
@@ -33,6 +34,12 @@ function saveFeed(data: ICollect[]) {
 function saveSearch(data: ICollect[]) {
   return {
     type: SEARCH,
+    data
+  };
+}
+function saveDetail(data: ICollect) {
+  return {
+    type: DETAIL,
     data
   };
 }
@@ -80,6 +87,27 @@ function search(searchTerm: string) {
       .catch(err => console.log(err));
   };
 }
+function detail(imageId: number) {
+  return (dispatch: Dispatch, getState: any) => {
+    const {
+      user: { token }
+    } = getState();
+    axios
+      .get(`${API_URL}/collects/detail/${imageId}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(res => {
+        if (res.status === 200) {
+          dispatch(saveDetail(res.data));
+        } else {
+          console.log("Error => ", res.status, res.statusText, res.data);
+        }
+      })
+      .catch(err => console.log(err));
+  };
+}
 
 // initialState
 const initialState = {
@@ -93,6 +121,8 @@ function reducer(state = initialState, action: any) {
       return applySaveFeed(state, action);
     case SEARCH:
       return applySaveSearch(state, action);
+    case DETAIL:
+      return applySaveDetail(state, action);
     default:
       return state;
   }
@@ -113,11 +143,19 @@ function applySaveSearch(state, action) {
     searchCollects: data
   };
 }
+function applySaveDetail(state, action) {
+  const { data } = action;
+  return {
+    ...state,
+    detailCollect: data
+  };
+}
 
 // export
 export const actionCreators = {
   feed,
-  search
+  search,
+  detail
 };
 
 export default reducer;

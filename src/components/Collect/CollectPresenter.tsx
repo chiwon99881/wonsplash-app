@@ -45,7 +45,9 @@ const CollectPresenter: React.SFC<IProps> = ({
   likeCount
 }) => {
   return (
-    <TouchableOpacity onPress={() => Alert.alert("image")}>
+    <TouchableOpacity
+      onPress={() => navigation.navigate("DetailPhoto", { imageId: id })}
+    >
       <ImageBackground
         source={{ uri: file }}
         resizeMode={"stretch"}
