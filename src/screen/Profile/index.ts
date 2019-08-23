@@ -5,11 +5,12 @@ import { actionCreators as userActions } from "../../../redux/modules/user";
 const mapStateToProps = (state, ownProps) => {
   const { navigation } = ownProps;
   const {
-    user: { profile }
+    user: { profile, username }
   } = state;
   return {
     navigation,
-    profile
+    profile,
+    username
   };
 };
 const mapDispatchToProps = (dispatch, ownProps) => {

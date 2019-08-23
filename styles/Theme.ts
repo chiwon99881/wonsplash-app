@@ -10,5 +10,6 @@ export default {
   headerHight: "120px",
   photoMaxWidth: "1230px",
   redColor: "#F15151",
-  blueFollowColor: "#007FFF"
+  blueFollowColor: "#007FFF",
+  darkGreyColor: "#3E3E3E"
 };
