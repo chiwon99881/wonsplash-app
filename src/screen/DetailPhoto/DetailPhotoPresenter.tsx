@@ -65,13 +65,15 @@ interface IProps {
   detailCollect: ICollect;
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
   toggleModal: () => void;
+  toggleLike: () => void;
   isModalOpen: boolean;
 }
 const DetailPhotoPresenter: React.SFC<IProps> = ({
   detailCollect,
   navigation,
   toggleModal,
-  isModalOpen
+  isModalOpen,
+  toggleLike
 }) => {
   return (
     <Container>
@@ -100,7 +102,7 @@ const DetailPhotoPresenter: React.SFC<IProps> = ({
             color={"white"}
           />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={toggleLike}>
           <Ionicons
             name={"ios-heart"}
             size={30}

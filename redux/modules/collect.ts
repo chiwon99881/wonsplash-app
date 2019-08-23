@@ -23,6 +23,7 @@ export interface ICollect {
 const FEED = "FEED";
 const SEARCH = "SEARCH";
 const DETAIL = "DETAIL";
+const TOGGLE_LIKE = "TOGGLE_LIKE";
 
 // action creator
 function saveFeed(data: ICollect[]) {
@@ -41,6 +42,12 @@ function saveDetail(data: ICollect) {
   return {
     type: DETAIL,
     data
+  };
+}
+function saveToggleLike(imageId: number) {
+  return {
+    type: TOGGLE_LIKE,
+    imageId
   };
 }
 
@@ -108,6 +115,48 @@ function detail(imageId: number) {
       .catch(err => console.log(err));
   };
 }
+function likePhoto(imageId: number) {
+  return (dispatch: Dispatch, getState: any) => {
+    const {
+      user: { token }
+    } = getState();
+    axios
+      .post(`${API_URL}/collects/like/${imageId}/`, null, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(res => {
+        if (res.status === 201) {
+          dispatch(saveToggleLike(imageId));
+        } else {
+          console.log("Error => ", res.status, res.statusText, res.data);
+        }
+      })
+      .catch(err => console.log(err));
+  };
+}
+function unlikePhoto(imageId: number) {
+  return (dispatch: Dispatch, getState: any) => {
+    const {
+      user: { token }
+    } = getState();
+    axios
+      .delete(`${API_URL}/collects/unlike/${imageId}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(res => {
+        if (res.status === 200) {
+          dispatch(saveToggleLike(imageId));
+        } else {
+          console.log("Error => ", res.status, res.statusText, res.data);
+        }
+      })
+      .catch(err => console.log(err));
+  };
+}
 
 // initialState
 const initialState = {
@@ -123,6 +172,8 @@ function reducer(state = initialState, action: any) {
       return applySaveSearch(state, action);
     case DETAIL:
       return applySaveDetail(state, action);
+    case TOGGLE_LIKE:
+      return applyToggleLikePhoto(state, action);
     default:
       return state;
   }
@@ -150,12 +201,31 @@ function applySaveDetail(state, action) {
     detailCollect: data
   };
 }
+function applyToggleLikePhoto(state, action) {
+  const { imageId } = action;
+  const { detailCollect } = state;
+  if (detailCollect.id === imageId) {
+    return {
+      ...state,
+      detailCollect: {
+        ...state.detailCollect,
+        is_liked: !state.detailCollect.is_liked
+      }
+    };
+  } else {
+    return {
+      ...state
+    };
+  }
+}
 
 // export
 export const actionCreators = {
   feed,
   search,
-  detail
+  detail,
+  likePhoto,
+  unlikePhoto
 };
 
 export default reducer;

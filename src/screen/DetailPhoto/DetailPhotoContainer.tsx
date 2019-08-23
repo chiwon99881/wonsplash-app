@@ -8,6 +8,8 @@ import { NavigationParams } from "react-navigation";
 interface IProps {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
   detail: () => void;
+  likePhoto: () => void;
+  unlikePhoto: () => void;
   detailCollect: ICollect;
 }
 interface IState {
@@ -38,6 +40,18 @@ class DetailPhotoContainer extends React.Component<IProps, IState> {
       isModalOpen: !this.state.isModalOpen
     });
   };
+  public toggleLike = () => {
+    const {
+      detailCollect: { is_liked },
+      likePhoto,
+      unlikePhoto
+    } = this.props;
+    if (is_liked) {
+      unlikePhoto();
+    } else {
+      likePhoto();
+    }
+  };
 
   public render() {
     const { loading } = this.state;
@@ -52,6 +66,7 @@ class DetailPhotoContainer extends React.Component<IProps, IState> {
           navigation={navigation}
           toggleModal={this.toggleModal}
           isModalOpen={isModalOpen}
+          toggleLike={this.toggleLike}
         />
       );
     }

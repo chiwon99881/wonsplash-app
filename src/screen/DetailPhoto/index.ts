@@ -22,6 +22,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     detail: () => {
       dispatch(collectActions.detail(imageId));
+    },
+    likePhoto: () => {
+      dispatch(collectActions.likePhoto(imageId));
+    },
+    unlikePhoto: () => {
+      dispatch(collectActions.unlikePhoto(imageId));
     }
   };
 };
