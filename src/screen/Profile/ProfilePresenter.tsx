@@ -7,13 +7,7 @@ import { IProfile, IMyLikes } from "../../../redux/modules/user";
 import constants from "../../../styles/constants";
 import Theme from "../../../styles/Theme";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import {
-  TouchableOpacity,
-  Alert,
-  View,
-  Text,
-  ActivityIndicator
-} from "react-native";
+import { TouchableOpacity, View, Text, ActivityIndicator } from "react-native";
 import Avatar from "../../components/Avatar";
 import Collect from "../../components/Collect";
 import { ICollect } from "../../../redux/modules/collect";
@@ -168,7 +162,7 @@ const ProfilePresenter: React.SFC<IProps> = ({
               </TouchableOpacity>
             )}
             {currentUser === profile.username && (
-              <TouchableOpacity onPress={() => Alert.alert("Update Profile")}>
+              <TouchableOpacity onPress={() => navigation.navigate("Edit")}>
                 <Ionicons name={"ios-settings"} size={33} color={"white"} />
               </TouchableOpacity>
             )}

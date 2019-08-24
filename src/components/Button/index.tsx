@@ -24,7 +24,7 @@ interface IProps {
   textBold: boolean;
   bgColor: string;
   width: string | number;
-  loading: boolean;
+  loading?: boolean;
   padding: number;
 }
 const Button: React.SFC<IProps> = ({
