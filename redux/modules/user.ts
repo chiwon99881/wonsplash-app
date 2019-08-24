@@ -30,12 +30,32 @@ export interface IProfile {
   post_count: number;
   images: ICollect[];
 }
+export interface IMyLikes {
+  id: number;
+  image: {
+    id: number;
+    file: string;
+    creator: {
+      id: number;
+      avatar: string;
+      username: string;
+    };
+    is_liked: boolean;
+    like_count: number;
+    natural_time: string;
+    tags: any;
+    views: number;
+  };
+  natural_time: string;
+}
 
 // action types
 const SAVE_TOKEN = "SAVE_TOKEN";
 const LOG_OUT = "LOG_OUT";
 const PROFILE = "PROFILE";
 const MY_PROFILE = "MY_PROFILE";
+const MY_LIKES = "MY_LIKES";
+const TOGGLE_FOLLOW = "TOGGLE_FOLLOW";
 
 // action (creator)
 function saveToken(data: ITokenData) {
@@ -59,6 +79,18 @@ function saveProfile(data: IProfile) {
   return {
     type: PROFILE,
     data
+  };
+}
+function saveMyLikes(data: IMyLikes[]) {
+  return {
+    type: MY_LIKES,
+    data
+  };
+}
+function saveToggleFollow(userId: number) {
+  return {
+    type: TOGGLE_FOLLOW,
+    userId
   };
 }
 
@@ -207,6 +239,79 @@ function getProfile(username: string) {
       .catch(err => console.log(err));
   };
 }
+function getMyLikes() {
+  return (dispatch: Dispatch, getState: any) => {
+    const {
+      user: { token }
+    } = getState();
+    axios
+      .get(`${API_URL}/users/mylikes/`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(res => {
+        if (res.status === 200) {
+          dispatch(saveMyLikes(res.data));
+        } else {
+          console.log("Error => ", res.status, res.statusText, res.data);
+        }
+      })
+      .catch(err => console.log(err));
+  };
+}
+function follow(userId: number) {
+  return (dispatch: Dispatch, getState: any) => {
+    const {
+      user: { token }
+    } = getState();
+    return axios
+      .post(`${API_URL}/users/follow/${userId}/`, null, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(res => {
+        if (res.status === 200) {
+          dispatch(saveToggleFollow(userId));
+          return true;
+        } else {
+          console.log("Error => ", res.status, res.statusText, res.data);
+          return false;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        return false;
+      });
+  };
+}
+function unfollow(userId: number) {
+  return (dispatch: Dispatch, getState: any) => {
+    const {
+      user: { token }
+    } = getState();
+    return axios
+      .post(`${API_URL}/users/unfollow/${userId}/`, null, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(res => {
+        if (res.status === 200) {
+          dispatch(saveToggleFollow(userId));
+          return true;
+        } else {
+          console.log("Error => ", res.status, res.statusText, res.data);
+          return false;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        return false;
+      });
+  };
+}
 
 // initialState
 const initialState = {
@@ -223,6 +328,10 @@ function reducer(state = initialState, action: any) {
       return applySaveMyProfile(state, action);
     case PROFILE:
       return applySaveProfile(state, action);
+    case MY_LIKES:
+      return applySaveMyLikes(state, action);
+    case TOGGLE_FOLLOW:
+      return applyToggleFollow(state, action);
     default:
       return state;
   }
@@ -261,6 +370,27 @@ function applySaveProfile(state, action) {
     profile: data
   };
 }
+function applySaveMyLikes(state, action) {
+  const { data } = action;
+  return {
+    ...state,
+    myLikes: data
+  };
+}
+function applyToggleFollow(state, action) {
+  const { userId } = action;
+  const { profile } = state;
+  if (userId === profile.id) {
+    return {
+      ...state,
+      profile: { ...state.profile, is_following: !state.profile.is_following }
+    };
+  } else {
+    return {
+      ...state
+    };
+  }
+}
 
 // export
 export const actionCreators = {
@@ -269,7 +399,10 @@ export const actionCreators = {
   facebookLogin,
   registration,
   getMyProfile,
-  getProfile
+  getProfile,
+  getMyLikes,
+  follow,
+  unfollow
 };
 
 export default reducer;

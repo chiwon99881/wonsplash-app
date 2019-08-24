@@ -24,7 +24,7 @@ const FEED = "FEED";
 const SEARCH = "SEARCH";
 const DETAIL = "DETAIL";
 const TOGGLE_LIKE = "TOGGLE_LIKE";
-
+const MY_FOLLOWING_IMAGES = "MY_FOLLOWING_IMAGES";
 // action creator
 function saveFeed(data: ICollect[]) {
   return {
@@ -48,6 +48,12 @@ function saveToggleLike(imageId: number) {
   return {
     type: TOGGLE_LIKE,
     imageId
+  };
+}
+function saveMyFollowingImages(data: ICollect[]) {
+  return {
+    type: MY_FOLLOWING_IMAGES,
+    data
   };
 }
 
@@ -157,6 +163,27 @@ function unlikePhoto(imageId: number) {
       .catch(err => console.log(err));
   };
 }
+function getMyFollowingImages() {
+  return (dispatch: Dispatch, getState: any) => {
+    const {
+      user: { username, token }
+    } = getState();
+    axios
+      .get(`${API_URL}/collects/${username}/followings/`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(res => {
+        if (res.status === 200) {
+          dispatch(saveMyFollowingImages(res.data));
+        } else {
+          console.log("Error => ", res.status, res.statusText, res.data);
+        }
+      })
+      .catch(err => console.log(err));
+  };
+}
 
 // initialState
 const initialState = {
@@ -174,6 +201,8 @@ function reducer(state = initialState, action: any) {
       return applySaveDetail(state, action);
     case TOGGLE_LIKE:
       return applyToggleLikePhoto(state, action);
+    case MY_FOLLOWING_IMAGES:
+      return applySaveMyFollowingImages(state, action);
     default:
       return state;
   }
@@ -218,6 +247,13 @@ function applyToggleLikePhoto(state, action) {
     };
   }
 }
+function applySaveMyFollowingImages(state, action) {
+  const { data } = action;
+  return {
+    ...state,
+    followingImages: data
+  };
+}
 
 // export
 export const actionCreators = {
@@ -225,7 +261,8 @@ export const actionCreators = {
   search,
   detail,
   likePhoto,
-  unlikePhoto
+  unlikePhoto,
+  getMyFollowingImages
 };
 
 export default reducer;
