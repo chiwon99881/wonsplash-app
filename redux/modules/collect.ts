@@ -184,6 +184,38 @@ function getMyFollowingImages() {
       .catch(err => console.log(err));
   };
 }
+function uploadPhoto(photoUri: string, tags: any) {
+  return (dispatch: Dispatch, getState: any) => {
+    const {
+      user: { token }
+    } = getState();
+    return axios
+      .post(
+        `${API_URL}/collects/post/`,
+        {
+          file: photoUri,
+          tags
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+      .then(res => {
+        if (res.status === 201) {
+          return true;
+        } else {
+          console.log("Error =>", res.status, res.statusText, res.data);
+          return false;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        return false;
+      });
+  };
+}
 
 // initialState
 const initialState = {
@@ -262,7 +294,8 @@ export const actionCreators = {
   detail,
   likePhoto,
   unlikePhoto,
-  getMyFollowingImages
+  getMyFollowingImages,
+  uploadPhoto
 };
 
 export default reducer;

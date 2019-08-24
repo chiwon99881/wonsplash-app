@@ -1,6 +1,11 @@
 import React from "react";
 import { AppLoading } from "expo";
-import { Ionicons, SimpleLineIcons, FontAwesome } from "@expo/vector-icons";
+import {
+  Ionicons,
+  SimpleLineIcons,
+  FontAwesome,
+  MaterialIcons
+} from "@expo/vector-icons";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import { Provider } from "react-redux";
@@ -27,7 +32,8 @@ class App extends React.Component<{}, IState> {
       await Font.loadAsync({
         ...Ionicons.font,
         ...SimpleLineIcons.font,
-        ...FontAwesome.font
+        ...FontAwesome.font,
+        ...MaterialIcons.font
       });
       await Asset.loadAsync([
         require("./assets/logo.png"),

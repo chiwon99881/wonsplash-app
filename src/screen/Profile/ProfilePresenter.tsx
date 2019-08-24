@@ -173,7 +173,9 @@ const ProfilePresenter: React.SFC<IProps> = ({
               </TouchableOpacity>
             )}
             {currentUser === profile.username && (
-              <TouchableOpacity onPress={() => Alert.alert("Submit Photo")}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("UploadPhoto")}
+              >
                 <Ionicons name={"ios-add"} size={40} color={"white"} />
               </TouchableOpacity>
             )}

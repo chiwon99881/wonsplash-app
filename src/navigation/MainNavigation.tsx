@@ -1,13 +1,16 @@
 import { createStackNavigator } from "react-navigation";
 import Feed from "../screen/Feed";
-import hasHeaderNavigation from "./hasHeaderNavigation";
+import HasHeaderNavigation from "./HasHeaderNavigation";
 import Profile from "../screen/Profile";
-
+import UploadPhoto from "../screen/UploadPhoto";
+import UploadCompletePhoto from "../screen/UploadCompletePhoto";
 const MainNavigation = createStackNavigator(
   {
     Feed,
-    hasHeaderNavigation,
-    Profile
+    HasHeaderNavigation,
+    Profile,
+    UploadPhoto,
+    UploadCompletePhoto
   },
   {
     headerMode: "none"
