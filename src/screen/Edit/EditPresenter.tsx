@@ -81,8 +81,11 @@ interface IProps {
   selected: ISelect | null;
   firstName: string;
   lastName: string;
+  editLoading: boolean;
   onChangeFirstName: (text) => void;
   onChangeLastname: (text) => void;
+  pickImage: () => Promise<void>;
+  onSubmitEdit: () => Promise<void>;
 }
 const EditPresenter: React.SFC<IProps> = ({
   navigation,
@@ -92,7 +95,10 @@ const EditPresenter: React.SFC<IProps> = ({
   firstName,
   lastName,
   onChangeFirstName,
-  onChangeLastname
+  onChangeLastname,
+  pickImage,
+  editLoading,
+  onSubmitEdit
 }) => {
   if (username !== myProfile.username) {
     return (
@@ -109,7 +115,7 @@ const EditPresenter: React.SFC<IProps> = ({
           </Header>
           <Body>
             <BodyLeft>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={pickImage}>
                 {selected === null ? (
                   <Avatar
                     uri={myProfile.avatar}
@@ -149,7 +155,7 @@ const EditPresenter: React.SFC<IProps> = ({
             </BodyRight>
           </Body>
           <Footer>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={onSubmitEdit}>
               <Button
                 text={"Edit"}
                 textColor={Theme.whiteFontColor}
@@ -157,7 +163,7 @@ const EditPresenter: React.SFC<IProps> = ({
                 textBold={true}
                 bgColor={Theme.blackFontColor}
                 width={constants.width - 30}
-                loading={false}
+                loading={editLoading}
                 padding={10}
               />
             </TouchableOpacity>

@@ -18,6 +18,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     getMyProfile: () => {
       dispatch(userActions.getMyProfile());
+    },
+    editProfile: (avatar?: string, firstName?: string, lastName?: string) => {
+      return dispatch(userActions.editProfile(avatar, firstName, lastName));
     }
   };
 };

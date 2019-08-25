@@ -22,7 +22,7 @@ const Avatar: React.SFC<IProps> = ({ uri, wid, hei, rad }) => {
         wid={wid}
         hei={hei}
         rad={rad}
-        style={{ resizeMode: "center" }}
+        style={{ resizeMode: "stretch" }}
       />
     );
   } else {
@@ -32,7 +32,7 @@ const Avatar: React.SFC<IProps> = ({ uri, wid, hei, rad }) => {
         wid={wid}
         hei={hei}
         rad={rad}
-        style={{ resizeMode: "center" }}
+        style={{ resizeMode: "stretch" }}
       />
     );
   }

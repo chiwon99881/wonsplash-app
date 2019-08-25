@@ -48,6 +48,12 @@ export interface IMyLikes {
   };
   natural_time: string;
 }
+export interface IEdit {
+  avatar: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+}
 
 // action types
 const SAVE_TOKEN = "SAVE_TOKEN";
@@ -56,7 +62,7 @@ const PROFILE = "PROFILE";
 const MY_PROFILE = "MY_PROFILE";
 const MY_LIKES = "MY_LIKES";
 const TOGGLE_FOLLOW = "TOGGLE_FOLLOW";
-
+const EDIT = "EDIT";
 // action (creator)
 function saveToken(data: ITokenData) {
   return {
@@ -91,6 +97,12 @@ function saveToggleFollow(userId: number) {
   return {
     type: TOGGLE_FOLLOW,
     userId
+  };
+}
+function saveEditProfile(data: IEdit) {
+  return {
+    type: EDIT,
+    data
   };
 }
 
@@ -312,6 +324,40 @@ function unfollow(userId: number) {
       });
   };
 }
+function editProfile(avatar?: string, firstName?: string, lastName?: string) {
+  return (dispatch: Dispatch, getState: any) => {
+    const {
+      user: { token, username }
+    } = getState();
+    return axios
+      .put(
+        `${API_URL}/users/${username}/`,
+        {
+          avatar,
+          first_name: firstName,
+          last_name: lastName
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+      .then(res => {
+        if (res.status === 200) {
+          saveEditProfile(res.data);
+          return true;
+        } else {
+          console.log("Error => ", res.status, res.statusText, res.data);
+          return false;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        return false;
+      });
+  };
+}
 
 // initialState
 const initialState = {
@@ -332,6 +378,8 @@ function reducer(state = initialState, action: any) {
       return applySaveMyLikes(state, action);
     case TOGGLE_FOLLOW:
       return applyToggleFollow(state, action);
+    case EDIT:
+      return applySaveEditProfile(state, action);
     default:
       return state;
   }
@@ -391,6 +439,18 @@ function applyToggleFollow(state, action) {
     };
   }
 }
+function applySaveEditProfile(state, action) {
+  const { data } = action;
+  return {
+    ...state,
+    myProfile: {
+      ...state.myProfile,
+      avatar: data.avatar,
+      first_name: data.first_name,
+      last_name: data.last_name
+    }
+  };
+}
 
 // export
 export const actionCreators = {
@@ -402,7 +462,8 @@ export const actionCreators = {
   getProfile,
   getMyLikes,
   follow,
-  unfollow
+  unfollow,
+  editProfile
 };
 
 export default reducer;
